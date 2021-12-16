@@ -34,13 +34,9 @@ try:
             "Password", password, 
             ".validateAndSubmit")
 
-        # Wait until "No" button is clickable
-        try :
-            driver.implicitly_wait(8)
-            driver.find_element_by_id("BacktoLeaveRequest").click()
-        # That window won't be visible if you've already confirmed
-        except ElementNotInteractableException:
-            pass
+        # Wait until "No" button is clickable (I'm assuming this confirms that my click has been recorded)
+        driver.implicitly_wait(8)
+        driver.find_element_by_id("BacktoLeaveRequest").click()
 
         # Let's quit
         driver.quit()
@@ -57,8 +53,9 @@ try:
 
     conn.commit()
 except:
-   # Rollback in case there is any error
+   # Rollback db transaction in case of error
    conn.rollback()
+   raise
 
 cursor.close()
 conn.close()
